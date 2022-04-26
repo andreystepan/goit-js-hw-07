@@ -5,6 +5,7 @@ console.log(galleryItems);
 
 const imageConteiner = document.querySelector('.gallery');
 const imageMarkup = creatGalleryItemsMarkup(galleryItems);
+let instance;
 
 
 imageConteiner.insertAdjacentHTML('beforeend', imageMarkup);
@@ -31,12 +32,20 @@ function handleGalleryItemClick(even) {
    
     even.preventDefault();
 
-    const instance = basicLightbox.create(`
+     instance = basicLightbox.create(`
     <img src="${even.target.dataset.source}">
-     `);
+     `, {
+        onShow: () => imageConteiner.addEventListener("keydown", handleToggerKeydown),
+        onClose: () => imageConteiner.removeEventListener("keydown", handleToggerKeydown ) });
     
     instance.show();
     
 } 
+
+function handleToggerKeydown(even) {
+    if (even.key === "Escape") {
+        instance.close()
+    }
+};
 
    
